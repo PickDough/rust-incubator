@@ -2,8 +2,6 @@ use std::{borrow::Cow, env};
 
 const DEFAULT_CONF_PATH: &'static str = "/etc/app/app.conf";
 
-// I know that it should panic if `--conf` is empty, but this solution seems nicer to me,
-// allowing to just use the default one.
 fn extract_conf_path() -> Cow<'static, str> {
     let env_var = env::vars().find(|e| e.0 == "APP_CONF").map(|e| e.1);
 
