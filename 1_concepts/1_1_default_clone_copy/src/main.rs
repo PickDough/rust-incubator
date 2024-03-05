@@ -9,10 +9,13 @@ struct Polyline {
     points: Vec<Point>,
 }
 
+struct NonZeroVec<T>(T, Vec<T>);
+
 impl Polyline {
-    fn new(points: Vec<Point>) -> Self {
-        assert!(points.len() > 0, "Polyline type represents a non-empty set of Point");
-        Polyline { points }
+    fn new(points: NonZeroVec<Point>) -> Self {
+        let mut v = vec![points.0];
+        v.extend(points.1);
+        Polyline { points: v }
     }
     
     fn at(&mut self, idx: usize) -> &mut Point {
@@ -27,17 +30,11 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use crate::{Point, Polyline};
-
-    #[test]
-    #[should_panic(expected = "Polyline type represents a non-empty set of Point")]
-    fn assert_polyline() {
-        let poly = Polyline::new(vec![]);
-    }
+    use crate::{NonZeroVec, Point, Polyline};
 
     #[test]
     fn assert_cloning() {
-        let mut poly = Polyline::new(vec![Point::default(), Point {x: 10, ..Default::default()}]);
+        let mut poly = Polyline::new(NonZeroVec(Point::default(), vec![Point {x: 10, ..Default::default()}]));
         let mut poly_clone = poly.clone();
 
         poly.at(1).x = 15;
