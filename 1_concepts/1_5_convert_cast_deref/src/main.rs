@@ -1,4 +1,4 @@
-use rand::{Rng, StdRng};
+use rand;
 use std::{borrow::Borrow, ops::Deref};
 
 use once_cell::sync::Lazy;
@@ -49,10 +49,7 @@ impl<T> Deref for Random<T> {
     type Target = T;
 
     fn deref(&self) -> &Self::Target {
-        static SEED: &[usize] = &[1, 2, 3, 4];
-        static mut RNG: Lazy<StdRng> = Lazy::new(|| rand::SeedableRng::from_seed(SEED));
-
-        unsafe { &self.0.as_ref()[RNG.gen_range(0, 3)] }
+        &self.0[rand::random::<usize>() % 3]
     }
 }
 
@@ -70,6 +67,7 @@ fn main() {
     println!("{}", s);
 
     let r = Random::new(42, 69, 420);
+    println!("{}", r.deref());
     println!("{}", r.deref());
     println!("{}", r.as_ref());
 }
