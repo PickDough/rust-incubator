@@ -254,6 +254,11 @@ version = "0.1.0"
 [[package]]
 name = "step_1_5"
 version = "0.1.0"
+dependencies = [
+ "once_cell",
+ "rand",
+ "regex",
+]
 
 [[package]]
 name = "step_1_6"
