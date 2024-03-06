@@ -53,8 +53,7 @@ impl<T> Deref for Random<T> {
     }
 }
 
-impl<T> AsRef<T> for Random<T>
-{
+impl<T> AsRef<T> for Random<T> {
     fn as_ref(&self) -> &T {
         self.deref()
     }
