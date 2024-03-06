@@ -6,6 +6,6 @@ publish = false
 
 
 [dependencies]
-regex = "*"
-once_cell = "*"
-rand = "*"
+once_cell = "1.19.0"
+rand = "0.8.5"
+regex = "1.10.3"
