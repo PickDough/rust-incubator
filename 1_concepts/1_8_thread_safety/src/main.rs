@@ -3,7 +3,6 @@ use std::marker::PhantomData;
 use std::rc::Rc;
 use std::thread;
 
-// Have no idea how to implement it safely.
 #[derive(Debug, Default)]
 struct OnlySync {
     data: PhantomData<MutexGuard<'static, i32>>,
