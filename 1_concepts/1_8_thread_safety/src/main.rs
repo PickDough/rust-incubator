@@ -6,9 +6,8 @@ use std::thread;
 // Have no idea how to implement it safely.
 #[derive(Debug, Default)]
 struct OnlySync {
-    data: PhantomData<Rc<i32>>,
+    data: PhantomData<MutexGuard<'static, i32>>,
 }
-unsafe impl Sync for OnlySync {}
 
 #[derive(Debug, Default)]
 struct OnlySend {
