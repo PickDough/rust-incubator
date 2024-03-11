@@ -1,4 +1,4 @@
-use std::net::{IpAddr, SocketAddr};
+use std::net::{AddrParseError, IpAddr, SocketAddr};
 
 fn main() {
     println!("Refactor me!");
@@ -26,10 +26,8 @@ impl Default for Error {
 }
 
 impl Error {
-    pub fn new(code: String) -> Self {
-        let mut err = Self::default();
-        err.code = code;
-        err
+    pub fn new<S: Into<String>>(code: S) -> Self {
+        Self { code: code.into(), ..Default::default() }
     }
 
     pub fn status(&mut self, s: u16) -> &mut Self {
@@ -37,8 +35,8 @@ impl Error {
         self
     }
 
-    pub fn message(&mut self, m: String) -> &mut Self {
-        self.message = m;
+    pub fn message<S: Into<String>>(&mut self, m: S) -> &mut Self {
+        self.message = m.into();
         self
     }
 }
@@ -46,9 +44,42 @@ impl Error {
 #[derive(Debug, Default)]
 pub struct Server(Option<SocketAddr>);
 
+pub enum ServerTuple<'a> {
+    Str(&'a str),
+    Ip(IpAddr),
+}
+
+impl<'a> From<&'a str> for ServerTuple<'a> {
+    fn from(value: &'a str) -> ServerTuple<'a> {
+        ServerTuple::Str(value)
+    }
+}
+
+impl<'a> From<IpAddr> for ServerTuple<'a> {
+    fn from(value: IpAddr) -> Self {
+        ServerTuple::Ip(value)
+    }
+}
+
+impl<'a> TryInto<IpAddr> for ServerTuple<'a> {
+    type Error = AddrParseError;
+
+    fn try_into(self) -> Result<IpAddr, Self::Error> {
+        match self {
+            ServerTuple::Str(s) => {
+                s.parse()
+            }
+            ServerTuple::Ip(ip) => {
+                Ok(ip)
+            }
+        }
+    }
+}
+
+
 impl Server {
-    pub fn bind(&mut self, ip: IpAddr, port: u16) {
-        self.0 = Some(SocketAddr::new(ip, port))
+    pub fn bind<'a, S: Into<ServerTuple<'a>>>(&mut self, ip: S, port: u16) {
+        self.0 = ip.into().try_into().map_or_else(|_| None, |i| Some(SocketAddr::new(i, port)));
     }
 }
 
@@ -68,7 +99,7 @@ mod server_spec {
             server.bind(IpAddr::V4(Ipv4Addr::new(127, 0, 0, 1)), 8080);
             assert_eq!(format!("{}", server.0.unwrap()), "127.0.0.1:8080");
 
-            server.bind("::1".parse().unwrap(), 9911);
+            server.bind("::1", 9911);
             assert_eq!(format!("{}", server.0.unwrap()), "[::1]:9911");
         }
     }
