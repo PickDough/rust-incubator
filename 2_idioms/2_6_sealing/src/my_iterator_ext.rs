@@ -5,11 +5,12 @@
 //! [0]: https://docs.rs/itertools/latest/src/itertools/lib.rs.html#2078-2136
 
 use std::fmt;
+use crate::my_iterator_ext::private::Sealed;
 
 use self::format::{Format, FormatWith};
 
 /// Extension trait for an [`Iterator`].
-pub trait MyIteratorExt: Iterator {
+pub trait MyIteratorExt: Iterator + Sealed {
     /// Format all iterator elements, separated by `sep`.
     ///
     /// All elements are formatted (any formatting trait)
@@ -70,7 +71,11 @@ pub trait MyIteratorExt: Iterator {
     }
 }
 
-impl<T> MyIteratorExt for T where T: Iterator {}
+mod private {
+    pub trait Sealed {}
+}
+
+impl<T> MyIteratorExt for T where T: Iterator + Sealed {}
 
 mod format {
     use std::{cell::RefCell, fmt};

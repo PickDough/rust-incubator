@@ -6,6 +6,8 @@ use std::{
     fmt::{Debug, Display},
 };
 
+use crate::my_error::private::Sealed;
+
 /// Basic expectations for error values.
 pub trait MyError: Debug + Display {
     /// The lower-level source of this error, if any.
@@ -67,12 +69,16 @@ pub trait MyError: Debug + Display {
     ///
     /// __This is memory-unsafe to override in user code.__
     #[doc(hidden)]
-    fn type_id(&self) -> TypeId
-    where
-        Self: 'static,
+    fn type_id(&self, _: Sealed) -> TypeId
+        where
+            Self: 'static,
     {
         TypeId::of::<Self>()
     }
+}
+
+mod private {
+    pub struct Sealed;
 }
 
 impl<'a, T: MyError + ?Sized> MyError for &'a T {
