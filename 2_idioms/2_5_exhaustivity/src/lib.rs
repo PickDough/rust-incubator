@@ -31,39 +31,27 @@ pub mod user {
 
     impl EventSourced<event::UserNameUpdated> for User {
         fn apply(&mut self, ev: &event::UserNameUpdated) {
-            let event::UserNameUpdated {
-                user_id, name, at
-            } = ev;
-            self.name = name.clone();
+            self.name = ev.name.clone();
         }
     }
 
     impl EventSourced<event::UserBecameOnline> for User {
         fn apply(&mut self, ev: &event::UserBecameOnline) {
-            let event::UserBecameOnline {
-                user_id, at
-            } = *ev;
-            self.online_since = Some(at);
+            self.online_since = Some(ev.at);
         }
     }
 
     impl EventSourced<event::UserBecameOffline> for User {
         fn apply(&mut self, ev: &event::UserBecameOffline) {
-            let event::UserBecameOffline {
-                user_id, at
-            } = *ev;
             self.online_since = None;
-            self.last_activity_at = LastActivityDateTime(at);
+            self.last_activity_at = LastActivityDateTime(ev.at);
         }
     }
 
     impl EventSourced<event::UserDeleted> for User {
         fn apply(&mut self, ev: &event::UserDeleted) {
-            let event::UserDeleted {
-                user_id, at
-            } = *ev;
-            self.deleted_at = Some(at);
-            self.last_activity_at = LastActivityDateTime(at.0);
+            self.deleted_at = Some(ev.at);
+            self.last_activity_at = LastActivityDateTime(ev.at.0);
         }
     }
 
