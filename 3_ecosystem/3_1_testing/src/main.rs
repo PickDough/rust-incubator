@@ -1,14 +1,18 @@
-use std::{cmp::Ordering, env, io::{self, BufRead, Read}};
+use std::{
+    cmp::Ordering,
+    env,
+    io::{self, BufRead},
+};
 
 fn main() {
     println!("Guess the number!");
 
-    let secret_number = get_secret_number();
+    let secret_number = get_secret_number(env::args());
 
     loop {
         println!("Please input your guess.");
 
-        let guess = match get_guess_number() {
+        let guess = match get_guess_number(&mut io::stdin().lock()) {
             Some(n) => n,
             _ => continue,
         };
@@ -49,10 +53,59 @@ fn get_guess_number<R: BufRead>(read_buff: &mut R) -> Option<u32> {
 
 #[cfg(test)]
 mod tests {
-    use std::io;
+    use std::collections::VecDeque;
+
+    use test_case::test_case;
+
+    use crate::{get_guess_number, get_secret_number};
 
     #[test]
-    fn test() {
-        
+    #[should_panic(expected = "No secret number is specified")]
+    fn test_no_secret_number() {
+        get_secret_number(vec!["".to_owned()].into_iter());
+    }
+
+    #[test]
+    #[should_panic(expected = "Secret number is not a number")]
+    fn test_secret_number_nan() {
+        get_secret_number(vec!["number".to_owned(), "64i32".to_owned()].into_iter());
+    }
+
+    #[test]
+    fn test_secret_number() {
+        assert_eq!(
+            64,
+            get_secret_number(vec!["number".to_owned(), "64".to_owned()].into_iter())
+        );
+    }
+
+    #[test_case("sixty two")]
+    #[test_case("6_3")]
+    #[test_case("6.4")]
+    fn test_get_guess_number_none(str: &str) {
+        assert_eq!(
+            None,
+            get_guess_number(
+                &mut (str
+                    .as_bytes()
+                    .iter()
+                    .map(Clone::clone)
+                    .collect::<VecDeque<u8>>()),
+            )
+        );
+    }
+
+    #[test]
+    fn test_get_guess_number_some() {
+        assert_eq!(
+            Some(64),
+            get_guess_number(
+                &mut ("64"
+                    .as_bytes()
+                    .iter()
+                    .map(Clone::clone)
+                    .collect::<VecDeque<u8>>()),
+            )
+        );
     }
 }
