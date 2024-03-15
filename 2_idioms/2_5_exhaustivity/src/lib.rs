@@ -23,6 +23,7 @@ pub mod user {
                 user_id,
                 at
             } = *ev;
+
             self.id = user_id;
             self.created_at = at;
             self.last_activity_at = LastActivityDateTime(at.0);
@@ -31,27 +32,48 @@ pub mod user {
 
     impl EventSourced<event::UserNameUpdated> for User {
         fn apply(&mut self, ev: &event::UserNameUpdated) {
-            self.name = ev.name.clone();
+            let event::UserNameUpdated {
+                user_id,
+                at,
+                name,
+            } = ev;
+
+            self.name = name.clone();
         }
     }
 
     impl EventSourced<event::UserBecameOnline> for User {
         fn apply(&mut self, ev: &event::UserBecameOnline) {
-            self.online_since = Some(ev.at);
+            let event::UserBecameOnline {
+                user_id,
+                at,
+            } = *ev;
+
+            self.online_since = Some(at);
         }
     }
 
     impl EventSourced<event::UserBecameOffline> for User {
         fn apply(&mut self, ev: &event::UserBecameOffline) {
+            let event::UserBecameOffline {
+                user_id,
+                at,
+            } = *ev;
+
             self.online_since = None;
-            self.last_activity_at = LastActivityDateTime(ev.at);
+            self.last_activity_at = LastActivityDateTime(at);
         }
     }
 
     impl EventSourced<event::UserDeleted> for User {
         fn apply(&mut self, ev: &event::UserDeleted) {
+            let event::UserDeleted {
+                user_id,
+                at,
+            } = *ev;
+
             self.deleted_at = Some(ev.at);
-            self.last_activity_at = LastActivityDateTime(ev.at.0);
+            self.last_activity_at = LastActivityDateTime(at.0);
         }
     }
 
