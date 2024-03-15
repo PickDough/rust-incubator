@@ -1,4 +1,7 @@
-use std::{any::{Any, TypeId}, collections::BTreeMap, iter::Map, marker::PhantomData};
+use std::collections::BTreeMap;
+
+use post_state::{Deleted, New, PostState, PostStateEnum, Published, UnModerated};
+mod post_state;
 
 mod post {
     #[derive(Clone, Debug, PartialEq, PartialOrd, Eq, Ord)]
@@ -16,44 +19,37 @@ mod user {
     pub struct Id(pub u64);
 }
 
-trait PostState {}
 #[derive(Debug, Clone)]
-struct New;
-
-impl PostState for New {}
-#[derive(Debug, Clone)]
-struct UnModerated;
-
-impl PostState for UnModerated {}
-#[derive(Debug, Clone)]
-struct Published;
-
-impl PostState for Published {}
-#[derive(Debug, Clone)]
-struct Deleted;
-
-impl PostState for Deleted {}
-
-#[derive(Debug, Clone)]
-struct Post<S> {
+struct Post<S: Clone> {
     id: post::Id,
     user_id: user::Id,
     title: post::Title,
     body: post::Body,
-    state: PhantomData<S>,
+    state: S,
 }
 
-impl<S> Post<S> {
-    fn from<T>(self) -> Post<T> {
+impl Post<PostStateEnum> {
+    fn try_into<T: PostState + Clone>(self) -> Result<Post<T>, ()> {
+        match T::try_from(self.state.clone()) {
+            Ok(_) => Ok(Post::from::<T>(self)),
+            Err(_) => Err(()),
+        }
+    }
+}
+
+impl<S: Clone> Post<S> {
+    fn from<T: Default + Clone>(self) -> Post<T> {
         Post {
             id: self.id,
             user_id: self.user_id,
             title: self.title,
             body: self.body,
-            state: Default::default(),
+            state: T::default(),
         }
     }
+}
 
+impl<S: Clone> Post<S> {
     fn id(&self) -> &post::Id {
         &self.id
     }
@@ -101,63 +97,67 @@ impl Post<Published> {
     }
 }
 
-enum PostStates {
-    New(Post<New>),
-    UnModerated(Post<UnModerated>),
-    Published(Post<Published>),
-    Deleted(Post<Deleted>),
-}
-
-impl PostStates {}
-
-struct PostStore(BTreeMap<post::Id, (Post<Box<dyn PostState>>, TypeId)>);
+struct PostStore(BTreeMap<post::Id, Post<PostStateEnum>>);
 
 impl PostStore {
     fn new() -> Self {
         PostStore { 0: BTreeMap::new() }
     }
 
-    fn add_post<S: PostState + 'static>(&mut self, post: Post<S>) {
-        self.0.insert(post.id().clone(), (post.from::<Box<dyn PostState>>(), TypeId::of::<S>()));
+    fn add_post<S: PostState + 'static + Clone>(&mut self, post: Post<S>) {
+        self.0.insert(
+            post.id().clone(),
+            Post {
+                id: post.id,
+                user_id: post.user_id,
+                title: post.title,
+                body: post.body,
+                state: post.state.into(),
+            },
+        );
     }
 
     fn map_post_by_id<'a, F, U>(&'a self, post_id: &post::Id, f: F) -> Option<&'a U>
     where
-        F: FnOnce(&Post<Box<dyn PostState>>) -> &U,
+        F: FnOnce(&Post<PostStateEnum>) -> &U,
     {
-        self.0
-            .get(post_id)
-            .and_then(|v| Some(f(&v.0)))
+        self.0.get(post_id).and_then(|v| Some(f(&v)))
     }
 
-    fn take<S: PostState + 'static>(&mut self, post_id: &post::Id) -> Option<Post<S>> {
+    fn take<S: PostState + 'static + Clone>(&mut self, post_id: &post::Id) -> Option<Post<S>> {
         self.0
-        .remove(post_id)
-        .and_then(|v| {
-            if v.1 != TypeId::of::<S>() {
-                None
-            } else {
-                Some(v.0.from::<S>())
-            }
-        })
+            .remove(post_id)
+            .and_then(|v| match S::try_from(v.state) {
+                Ok(s) => Some(Post {
+                    id: v.id,
+                    user_id: v.user_id,
+                    title: v.title,
+                    body: v.body,
+                    state: s,
+                }),
+                Err(_) => None,
+            })
     }
 }
 
 fn main() {
-    let post = Post::new(
+    let a = Post::new(
         post::Id(1),
         user::Id(1),
         post::Title("Fresh Post".to_owned()),
         post::Body("Blah blah blah".to_owned()),
     );
-    let id = post.id().clone();
 
-    let mut store = PostStore::new();
-    store.add_post(post);
+    let mut b = a.clone();
+    b.id = post::Id(2);
+    let b = b.publish();
 
-    let map = store.map_post_by_id(&id, |post| post.title());
+    let mut post_store = PostStore::new();
+    post_store.add_post(a);
+    post_store.add_post(b);
 
-    println!("{:?}", map);
+    let x = post_store.map_post_by_id(&post::Id(1), |p| p.title());
 
-    println!("{:?}", store.take::<New>(&id))
+    println!("{:?}", post_store.take::<New>(&post::Id(1)));
+    println!("{:?}", post_store.take::<New>(&post::Id(2)));
 }
