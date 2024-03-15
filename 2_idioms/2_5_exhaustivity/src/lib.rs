@@ -33,8 +33,8 @@ pub mod user {
     impl EventSourced<event::UserNameUpdated> for User {
         fn apply(&mut self, ev: &event::UserNameUpdated) {
             let event::UserNameUpdated {
-                user_id,
-                at,
+                user_id: _,
+                at: _,
                 name,
             } = ev;
 
@@ -45,7 +45,7 @@ pub mod user {
     impl EventSourced<event::UserBecameOnline> for User {
         fn apply(&mut self, ev: &event::UserBecameOnline) {
             let event::UserBecameOnline {
-                user_id,
+                user_id: _,
                 at,
             } = *ev;
 
@@ -56,7 +56,7 @@ pub mod user {
     impl EventSourced<event::UserBecameOffline> for User {
         fn apply(&mut self, ev: &event::UserBecameOffline) {
             let event::UserBecameOffline {
-                user_id,
+                user_id: _,
                 at,
             } = *ev;
 
@@ -68,7 +68,7 @@ pub mod user {
     impl EventSourced<event::UserDeleted> for User {
         fn apply(&mut self, ev: &event::UserDeleted) {
             let event::UserDeleted {
-                user_id,
+                user_id: _,
                 at,
             } = *ev;
 
