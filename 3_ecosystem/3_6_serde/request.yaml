@@ -1,0 +1,28 @@
+type: success
+stream:
+  user_id: 8d234120-0bda-49b2-b7e0-fbd3912f6cbf
+  is_private: false
+  settings: 45345
+  shard_url: https://n3.example.com/sapi
+  public_tariff:
+    id: 1
+    price: 100
+    client_price: null
+    duration: 1h 0m 0s 0ms
+    description: test public tariff
+  private_tariff:
+    id: null
+    price: null
+    client_price: 250
+    duration: 0h 1m 0s 0ms
+    description: test private tariff
+gifts:
+- id: 1
+  price: 2
+  description: Gift 1
+- id: 2
+  price: 3
+  description: Gift 2
+debug:
+  duration: 0h 0m 0s 234ms
+  at: 2019-06-28T08:35:46Z
