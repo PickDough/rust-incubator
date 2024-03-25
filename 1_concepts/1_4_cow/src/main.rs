@@ -1,6 +1,6 @@
 use std::{borrow::Cow, env};
 
-const DEFAULT_CONF_PATH: &'static str = "/etc/app/app.conf";
+const DEFAULT_CONF_PATH: &str = "/etc/app/app.conf";
 
 fn extract_conf_path<V, A>(mut vars: V, mut args: A) -> Cow<'static, str>
 where

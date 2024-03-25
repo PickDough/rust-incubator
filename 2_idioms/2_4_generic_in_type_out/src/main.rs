@@ -1,3 +1,5 @@
+#![allow(dead_code, unused)]
+
 use std::net::{AddrParseError, IpAddr, SocketAddr};
 
 fn main() {
@@ -27,7 +29,10 @@ impl Default for Error {
 
 impl Error {
     pub fn new<S: Into<String>>(code: S) -> Self {
-        Self { code: code.into(), ..Default::default() }
+        Self {
+            code: code.into(),
+            ..Default::default()
+        }
     }
 
     pub fn status(&mut self, s: u16) -> &mut Self {
@@ -66,20 +71,18 @@ impl<'a> TryInto<IpAddr> for ServerTuple<'a> {
 
     fn try_into(self) -> Result<IpAddr, Self::Error> {
         match self {
-            ServerTuple::Str(s) => {
-                s.parse()
-            }
-            ServerTuple::Ip(ip) => {
-                Ok(ip)
-            }
+            ServerTuple::Str(s) => s.parse(),
+            ServerTuple::Ip(ip) => Ok(ip),
         }
     }
 }
 
-
 impl Server {
     pub fn bind<'a, S: Into<ServerTuple<'a>>>(&mut self, ip: S, port: u16) {
-        self.0 = ip.into().try_into().map_or_else(|_| None, |i| Some(SocketAddr::new(i, port)));
+        self.0 = ip
+            .into()
+            .try_into()
+            .map_or_else(|_| None, |i| Some(SocketAddr::new(i, port)));
     }
 }
 

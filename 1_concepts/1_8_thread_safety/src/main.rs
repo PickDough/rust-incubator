@@ -1,6 +1,7 @@
 use std::cell::Cell;
 use std::marker::PhantomData;
 use std::rc::Rc;
+use std::sync::MutexGuard;
 use std::thread;
 
 #[derive(Debug, Default)]
@@ -27,7 +28,7 @@ fn main() {
     let only_sync = OnlySync::default();
     let only_send = OnlySend::default();
     let sync_and_send = SyncAndSend::default();
-    let not_sync_not_send = NotSyncNotSend::default();
+    let _not_sync_not_send = NotSyncNotSend::default();
 
     thread::scope(|s| {
         // ** FAILS **

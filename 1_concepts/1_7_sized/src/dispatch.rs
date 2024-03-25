@@ -54,7 +54,7 @@ impl UserRepositoryDynamic {
     }
 
     fn set(&self, key: Uuid, val: User) -> Result<(), &'static str> {
-        if let Some(_) = self.get(key) {
+        if self.get(key).is_some() {
             Err("user with such key already exists")
         } else {
             self.storage.borrow_mut().set(key, val);
@@ -63,7 +63,7 @@ impl UserRepositoryDynamic {
     }
 
     fn update(&self, key: Uuid, val: User) -> Result<(), &'static str> {
-        if let Some(_) = self.get(key) {
+        if self.get(key).is_some() {
             self.storage.borrow_mut().set(key, val);
             Ok(())
         } else {
@@ -72,7 +72,7 @@ impl UserRepositoryDynamic {
     }
 
     fn get(&self, key: Uuid) -> Option<User> {
-        self.storage.borrow().get(&key).map(|f| f.clone())
+        self.storage.borrow().get(&key).cloned()
     }
 
     fn remove(&self, key: Uuid) -> Option<User> {

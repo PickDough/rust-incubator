@@ -1,3 +1,5 @@
+#![allow(dead_code, unused)]
+
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 struct Point {
     x: i32,
@@ -17,12 +19,11 @@ impl Polyline {
         v.extend(points.1);
         Polyline { points: v }
     }
-    
+
     fn at(&mut self, idx: usize) -> &mut Point {
         &mut self.points[idx]
     }
 }
-
 
 fn main() {
     println!("Implement me!");
@@ -34,7 +35,13 @@ mod tests {
 
     #[test]
     fn assert_cloning() {
-        let mut poly = Polyline::new(NonZeroVec(Point::default(), vec![Point {x: 10, ..Default::default()}]));
+        let mut poly = Polyline::new(NonZeroVec(
+            Point::default(),
+            vec![Point {
+                x: 10,
+                ..Default::default()
+            }],
+        ));
         let mut poly_clone = poly.clone();
 
         poly.at(1).x = 15;

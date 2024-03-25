@@ -3,7 +3,6 @@ use std::thread;
 use std::thread::sleep;
 use std::time::Duration;
 
-use arc_swap::access::Access;
 use arc_swap::ArcSwapOption;
 
 type ListRef<T> = ArcSwapOption<RwLock<Node<T>>>;
@@ -169,9 +168,7 @@ impl<T> DoublyLinkedList<T> {
             // I'm not sure if it is possible to lock it with ArcSwap, because it doesn't provide transactions.
             self.head.rcu(|rcu| {
                 match rcu.clone() {
-                    None => {
-                        self.tail.store(None)
-                    }
+                    None => self.tail.store(None),
                     Some(p) => {
                         p.write().unwrap().prev = None;
                     }
@@ -184,18 +181,18 @@ impl<T> DoublyLinkedList<T> {
         }
     }
 
-    fn into_iter(self) -> impl Iterator<Item=T>
-        where
-            T: Clone,
+    fn into_iter(self) -> impl Iterator<Item = T>
+    where
+        T: Clone,
     {
         DoublyLinkedListIter {
             curr: self.head.load_full(),
         }
     }
 
-    fn into_iter_rev(self) -> impl Iterator<Item=T>
-        where
-            T: Clone,
+    fn into_iter_rev(self) -> impl Iterator<Item = T>
+    where
+        T: Clone,
     {
         DoublyLinkedListIterReversed {
             curr: self.tail.load_full(),
@@ -247,4 +244,3 @@ fn main() {
         });
     });
 }
-
