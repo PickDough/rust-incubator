@@ -1,16 +1,18 @@
 use std::fs::File;
 use std::io;
-
+use std::sync::Arc;
 
 use log::{error, info};
 use tracing::instrument::WithSubscriber;
-use tracing::{Event, Level, Subscriber};
-use tracing_subscriber::filter::LevelFilter;
+use tracing::{Event, Subscriber};
+use tracing_core::Level;
+use tracing_subscriber::filter::{LevelFilter, Targets};
 use tracing_subscriber::fmt::format::Writer;
-use tracing_subscriber::fmt::{FmtContext, format, FormatEvent, FormatFields, FormattedFields};
+use tracing_subscriber::fmt::{format, FmtContext, FormatEvent, FormatFields, FormattedFields};
 use tracing_subscriber::prelude::*;
 use tracing_subscriber::registry::LookupSpan;
-use tracing_subscriber::{EnvFilter, fmt, Registry};
+use tracing_subscriber::{filter, prelude::*};
+use tracing_subscriber::{fmt, EnvFilter, Registry};
 
 fn main() {
     tracing_log::LogTracer::init().expect("Failed to set logger");
@@ -33,7 +35,8 @@ fn main() {
     let file_log = tracing_subscriber::fmt::layer()
         .with_writer(File::create("3_ecosystem/3_8_log/access.log").unwrap())
         .with_timer(timer)
-        .json();
+        .json()
+        .with_filter(Targets::new().with_target("access.log", Level::DEBUG));
     let subscriber = Registry::default()
         .with(file_log)
         .with(stdout_log)
@@ -42,6 +45,7 @@ fn main() {
     tracing::subscriber::set_global_default(subscriber).expect("Unable to set global subscriber");
 
     // Log an info and an error message
-    tracing::info!("This will be written to stdout");
-    tracing::error!("This will be written to stderr");
+    info!("This will be written to stdout");
+    error!("This will be written to stderr");
+    info!(target: "access.log", "xd");
 }

@@ -1,0 +1,1 @@
+{"timestamp":"2024-03-27T12:05:12.683881Z","level":"INFO","fields":{"message":"xd","log.target":"access.log","log.module_path":"step_3_8","log.file":"3_ecosystem/3_8_log/src/main.rs","log.line":50},"target":"access.log"}
