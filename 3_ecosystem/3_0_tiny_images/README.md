@@ -42,7 +42,7 @@ If you have enough time after implementing base requirements, consider to add th
 - Allow configuring download speed limit for images from remote [URL]s.
 - Cover your implementation with unit and E2E tests.
 - Support [PNG] images as well.
-- Add comprehensive documentation to your code.
+- Add comprehensive documentation to your code.›ca
 
 
 

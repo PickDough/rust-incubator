@@ -1,0 +1,6 @@
+quality = 10
+images = [
+    "./3_ecosystem/3_0_tiny_images/large_images/couch_cat.jpg",
+    "./3_ecosystem/3_0_tiny_images/large_images/fat_cat.jpeg",
+    "https://static.wixstatic.com/media/d12aa3_aadfa3da6dbe4347a5a54cec4d73275b~mv2.jpeg/v1/fill/w_414,h_414,q_90/d12aa3_aadfa3da6dbe4347a5a54cec4d73275b~mv2.jpeg",
+]
