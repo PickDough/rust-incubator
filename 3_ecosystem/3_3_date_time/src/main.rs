@@ -1,25 +1,33 @@
 #![allow(dead_code, unused)]
+use chrono::{format::strftime, Local, NaiveDate};
 fn main() {
     println!("Implement me!");
 }
 
 const NOW: &str = "2019-06-26";
 
-struct User;
+struct User {
+    birthday: NaiveDate,
+}
 
 impl User {
     fn with_birthdate(year: i32, month: u32, day: u32) -> Self {
-        unimplemented!()
+        Self {
+            birthday: NaiveDate::from_ymd_opt(year, month, day).unwrap(),
+        }
     }
 
     /// Returns current age of [`User`] in years.
     fn age(&self) -> u16 {
-        unimplemented!()
+        NaiveDate::parse_from_str(NOW, "%Y-%m-%d")
+            .unwrap()
+            .years_since(self.birthday.clone())
+            .unwrap_or(0) as u16
     }
 
     /// Checks if [`User`] is 18 years old at the moment.
     fn is_adult(&self) -> bool {
-        unimplemented!()
+        self.age() >= 18
     }
 }
 
@@ -45,7 +53,7 @@ mod age_spec {
     fn zero_if_birthdate_in_future() {
         for ((y, m, d), expected) in [
             ((2032, 6, 25), 0),
-            ((2016, 6, 27), 0),
+            ((2020, 6, 27), 0),
             ((3000, 6, 27), 0),
             ((9999, 6, 27), 0),
         ] {
