@@ -1,3 +1,4 @@
+#![allow(dead_code, unused)]
 use std::collections::BTreeMap;
 
 use post_state::{Deleted, New, PostState, PostStateEnum, Published, UnModerated};
@@ -26,15 +27,6 @@ struct Post<S: Clone> {
     title: post::Title,
     body: post::Body,
     state: S,
-}
-
-impl Post<PostStateEnum> {
-    fn try_into<T: PostState + Clone>(self) -> Result<Post<T>, ()> {
-        match T::try_from(self.state.clone()) {
-            Ok(_) => Ok(Post::from::<T>(self)),
-            Err(_) => Err(()),
-        }
-    }
 }
 
 impl<S: Clone> Post<S> {

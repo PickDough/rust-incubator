@@ -12,7 +12,7 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use crate::{
-        money::{Coin, Money, DIME, NICKEL, TWO_DIMES},
+        money::{Money, DIME, NICKEL, TWO_DIMES},
         vending_machine::{Product, ProductMap, VendingError, VendingMachine},
     };
 

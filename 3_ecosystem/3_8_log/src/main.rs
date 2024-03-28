@@ -1,18 +1,10 @@
+use log::{error, info};
 use std::fs::File;
 use std::io;
-use std::sync::Arc;
-
-use log::{error, info};
-use tracing::instrument::WithSubscriber;
-use tracing::{Event, Subscriber};
 use tracing_core::Level;
 use tracing_subscriber::filter::{LevelFilter, Targets};
-use tracing_subscriber::fmt::format::Writer;
-use tracing_subscriber::fmt::{format, FmtContext, FormatEvent, FormatFields, FormattedFields};
 use tracing_subscriber::prelude::*;
-use tracing_subscriber::registry::LookupSpan;
-use tracing_subscriber::{filter, prelude::*};
-use tracing_subscriber::{fmt, EnvFilter, Registry};
+use tracing_subscriber::{fmt, Registry};
 
 fn main() {
     tracing_log::LogTracer::init().expect("Failed to set logger");

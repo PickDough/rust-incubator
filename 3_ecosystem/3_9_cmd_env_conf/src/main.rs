@@ -2,7 +2,6 @@ use std::path::{Path, PathBuf};
 
 use clap::error::ErrorKind;
 use clap::Parser;
-use clap_derive::Parser;
 use config::Config;
 use serde::Deserialize;
 use smart_default::SmartDefault;
@@ -119,6 +118,6 @@ fn main() {
         .unwrap();
 
     let settings: Settings = settings.try_deserialize().unwrap();
-    
+
     println!("{:#?}", settings);
 }

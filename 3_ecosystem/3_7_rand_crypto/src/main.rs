@@ -1,9 +1,10 @@
-use std::path::Path;
+#![allow(dead_code, unused)]
 use argon2::Config;
 use base64ct::{Base64, Encoding};
 use rand::distributions::{Alphanumeric, DistString};
 use rand::random;
 use sha3::{Digest, Sha3_256};
+use std::path::Path;
 
 fn main() {
     println!("{}", get_file_hash(Path::new("./Cargo.toml")));
