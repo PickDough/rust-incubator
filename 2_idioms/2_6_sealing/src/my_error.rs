@@ -70,8 +70,8 @@ pub trait MyError: Debug + Display {
     /// __This is memory-unsafe to override in user code.__
     #[doc(hidden)]
     fn type_id(&self, _: Sealed) -> TypeId
-        where
-            Self: 'static,
+    where
+        Self: 'static,
     {
         TypeId::of::<Self>()
     }

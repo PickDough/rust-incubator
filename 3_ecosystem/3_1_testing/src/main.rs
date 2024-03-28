@@ -39,7 +39,6 @@ fn get_secret_number<I: Iterator<Item = String>>(config: I) -> u32 {
     secret_number
         .trim()
         .parse()
-        .ok()
         .expect("Secret number is not a number")
 }
 

@@ -1,3 +1,5 @@
+#![allow(dead_code, unused)]
+
 use std::{borrow::Cow, collections::HashMap, hash::Hash};
 
 trait Storage<K, V> {
@@ -51,7 +53,7 @@ impl<S: Storage<u64, User>> UserRepositoryStatic<S> {
     }
 
     fn set(&mut self, key: u64, val: User) -> Result<(), &'static str> {
-        if let Some(_) = self.get(key) {
+        if self.get(key).is_some() {
             Err("user with such key already exists")
         } else {
             self.storage.set(key, val);
@@ -60,7 +62,7 @@ impl<S: Storage<u64, User>> UserRepositoryStatic<S> {
     }
 
     fn update(&mut self, key: u64, val: User) -> Result<(), &'static str> {
-        if let Some(_) = self.get(key) {
+        if self.get(key).is_some() {
             self.storage.set(key, val);
             Ok(())
         } else {
@@ -87,7 +89,7 @@ impl UserRepositoryDynamic {
     }
 
     fn set(&mut self, key: u64, val: User) -> Result<(), &'static str> {
-        if let Some(_) = self.get(key) {
+        if self.get(key).is_some() {
             Err("user with such key already exists")
         } else {
             self.storage.set(key, val);
@@ -96,7 +98,7 @@ impl UserRepositoryDynamic {
     }
 
     fn update(&mut self, key: u64, val: User) -> Result<(), &'static str> {
-        if let Some(_) = self.get(key) {
+        if self.get(key).is_some() {
             self.storage.set(key, val);
             Ok(())
         } else {

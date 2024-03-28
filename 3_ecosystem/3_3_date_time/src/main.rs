@@ -1,5 +1,5 @@
+#![allow(dead_code, unused)]
 use chrono::{format::strftime, Local, NaiveDate};
-
 fn main() {
     println!("Implement me!");
 }
@@ -37,7 +37,7 @@ mod age_spec {
 
     #[test]
     fn counts_age() {
-        for ((y, m, d), expected) in vec![
+        for ((y, m, d), expected) in [
             ((1990, 6, 4), 29),
             ((1990, 7, 4), 28),
             ((0, 1, 1), 2019),
@@ -51,7 +51,7 @@ mod age_spec {
 
     #[test]
     fn zero_if_birthdate_in_future() {
-        for ((y, m, d), expected) in vec![
+        for ((y, m, d), expected) in [
             ((2032, 6, 25), 0),
             ((2020, 6, 27), 0),
             ((3000, 6, 27), 0),

@@ -1,3 +1,5 @@
+#![allow(dead_code, unused)]
+
 use std::borrow::Cow;
 
 use uuid::Uuid;
@@ -86,8 +88,8 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use uuid::Uuid;
     use test_case::test_case;
+    use uuid::Uuid;
 
     use crate::{CommandHandler, CreateUser, User, UserRepository};
 
@@ -119,8 +121,10 @@ mod tests {
     #[test_case(false)]
     fn should_activate_true(should_activate: bool) {
         let u = User::new("user@mail.com".into());
-        let repo = UserRepositoryMock {should_activate};
+        let repo = UserRepositoryMock { should_activate };
 
-        assert!(u.handle_command(&CreateUser{should_activate}, &repo).is_ok())
+        assert!(u
+            .handle_command(&CreateUser { should_activate }, &repo)
+            .is_ok())
     }
 }

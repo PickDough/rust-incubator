@@ -1,12 +1,19 @@
-use std::{cell::{Ref, RefCell}, rc::{Rc}};
+#![allow(dead_code, unused)]
+
+use std::{
+    cell::{Ref, RefCell},
+    rc::Rc,
+};
 
 struct GlobalStack<T> {
-    stack: Rc<RefCell<Vec<T>>>
+    stack: Rc<RefCell<Vec<T>>>,
 }
 
 impl<T> GlobalStack<T> {
     fn new() -> Self {
-        Self {stack: Rc::new(RefCell::new(vec![]))}
+        Self {
+            stack: Rc::new(RefCell::new(vec![])),
+        }
     }
 
     fn push(&self, data: T) {
@@ -26,7 +33,9 @@ impl<T> GlobalStack<T> {
 
 impl<T> Clone for GlobalStack<T> {
     fn clone(&self) -> Self {
-        Self { stack: Rc::clone(&self.stack) }
+        Self {
+            stack: Rc::clone(&self.stack),
+        }
     }
 }
 
@@ -38,7 +47,7 @@ fn main() {
 mod tests {
     use crate::GlobalStack;
 
-    #[test] 
+    #[test]
     fn assert_cloning() {
         let stack = GlobalStack::new();
         stack.push(1);
