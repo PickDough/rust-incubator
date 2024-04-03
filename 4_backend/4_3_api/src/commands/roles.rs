@@ -1,7 +1,8 @@
 use super::Command;
+use paperclip::actix::Apiv2Schema;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Apiv2Schema)]
 pub struct Create {
     pub name: String,
 
@@ -9,17 +10,17 @@ pub struct Create {
 }
 impl Command for Create {}
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Apiv2Schema)]
 pub struct Get {
     pub role: String,
 }
 impl Command for Get {}
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Apiv2Schema)]
 pub struct GetAll {}
 impl Command for GetAll {}
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Apiv2Schema)]
 pub struct Assign {
     pub user_id: i32,
 
@@ -27,7 +28,7 @@ pub struct Assign {
 }
 impl Command for Assign {}
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Apiv2Schema)]
 pub struct Update {
     pub role: String,
 
@@ -37,7 +38,7 @@ pub struct Update {
 }
 impl Command for Update {}
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Apiv2Schema)]
 pub struct Delete {
     pub role: String,
 }

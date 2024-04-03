@@ -1,4 +1,3 @@
-#[allow(dead_code, unused_variables)]
 use anyhow::Result;
 use clap::{command, Parser, Subcommand};
 use serde::{Deserialize, Serialize};

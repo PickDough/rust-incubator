@@ -1,4 +1,3 @@
-#[allow(async_fn_in_trait)]
 use std::fmt::Debug;
 
 pub mod clap;

@@ -30,3 +30,9 @@ tokio-stream = "0.1"
 futures-util = "0.3.30"
 actix-web = "4.5.1"
 actix-cors = "0.7.0"
+paperclip = { version = "0.8.2", features = [
+    "actix-base",
+    "v2",
+    "actix4",
+    "swagger-ui",
+] }
