@@ -1,0 +1,12 @@
+version: '3'
+services:
+  postgres:
+    image: postgres
+    container_name: some-postgres
+    environment:
+      POSTGRES_USER: rust
+      POSTGRES_PASSWORD: incubator
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data

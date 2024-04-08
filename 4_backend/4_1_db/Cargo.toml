@@ -3,3 +3,21 @@ name = "step_4_1"
 version = "0.1.0"
 edition = "2021"
 publish = false
+
+[dependencies]
+sqlx = { version = "0.7", features = ["runtime-tokio", "tls-native-tls"] }
+sea-orm = { version = "0.12", features = [
+    "sqlx-postgres",
+    "runtime-tokio-native-tls",
+    "macros",
+    "debug-print",
+    "with-json",
+] }
+clap = { version = "4.5.4", features = ["derive"] }
+smart-default = "0.7.1"
+derive = "1.0.0"
+tokio = { version = "1.37.0", features = ["full"] }
+dotenv = "0.15.0"
+anyhow = "1.0.81"
+slug = "0.1.5"
+serde_json = "1.0"
