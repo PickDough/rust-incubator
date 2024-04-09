@@ -1,0 +1,19 @@
+[package]
+name = "step_3"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+clap = { version = "4.5.4", features = ["derive", "help", "error-context"] }
+config = { version = "0.14.0", features = ["toml"] }
+reqwest = "0.12.2"
+serde = "1.0.197"
+tracing = "0.1.40"
+turbojpeg = { version = "1.0.1", features = ["image"] }
+tokio = { version = "1.25", features = ["full"] }
+anyhow = "1.0.81"
+futures = { version = "0.3.30" }
+image = "0.25.0"
+tracing-timing = "0.6.0"
