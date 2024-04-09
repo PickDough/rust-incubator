@@ -1,3 +1,4 @@
+#![allow(dead_code, unused)]
 use nom::AsBytes;
 use nom::branch::alt;
 use nom::bytes::complete::{tag, take_till};
@@ -156,7 +157,7 @@ mod spec {
 
     #[test]
     fn parses_sign() {
-        for (input, expected) in vec![
+        for (input, expected) in [
             ("", None),
             (">8.*", None),
             (">+8.*", Some(Sign::Plus)),
@@ -170,7 +171,7 @@ mod spec {
 
     #[test]
     fn parses_width() {
-        for (input, expected) in vec![
+        for (input, expected) in [
             ("", None),
             (">8.*", Some(8)),
             (">+8.*", Some(8)),
@@ -184,7 +185,7 @@ mod spec {
 
     #[test]
     fn parses_precision() {
-        for (input, expected) in vec![
+        for (input, expected) in [
             ("", None),
             (">8.*", Some(Precision::Asterisk)),
             (">+8.*", Some(Precision::Asterisk)),

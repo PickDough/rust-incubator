@@ -1,4 +1,3 @@
-use rand;
 use std::{borrow::Borrow, ops::Deref};
 
 use once_cell::sync::Lazy;
@@ -17,7 +16,7 @@ impl TryFrom<&str> for EmailString {
             .unwrap()
         });
 
-        if EMAIL_REGEX.is_match(&value) {
+        if EMAIL_REGEX.is_match(value) {
             Ok(EmailString(value.to_owned()))
         } else {
             Err("the string is not a valid email address")

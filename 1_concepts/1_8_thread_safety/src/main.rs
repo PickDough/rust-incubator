@@ -28,7 +28,7 @@ fn main() {
     let only_sync = OnlySync::default();
     let only_send = OnlySend::default();
     let sync_and_send = SyncAndSend::default();
-    let not_sync_not_send = NotSyncNotSend::default();
+    let _not_sync_not_send = NotSyncNotSend::default();
 
     thread::scope(|s| {
         // ** FAILS **

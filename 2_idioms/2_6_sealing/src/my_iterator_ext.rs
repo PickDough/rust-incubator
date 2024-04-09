@@ -4,8 +4,8 @@
 //!
 //! [0]: https://docs.rs/itertools/latest/src/itertools/lib.rs.html#2078-2136
 
-use std::fmt;
 use crate::my_iterator_ext::private::Sealed;
+use std::fmt;
 
 use self::format::{Format, FormatWith};
 

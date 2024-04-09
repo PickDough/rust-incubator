@@ -1,3 +1,4 @@
+#![allow(dead_code, unused)]
 use btree_proc_macro::btree_proc;
 use std::collections::BTreeMap;
 

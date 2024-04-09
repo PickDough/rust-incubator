@@ -3,9 +3,8 @@ use std::fs::File;
 use std::io::{BufReader, Write};
 
 use chrono::{DateTime, Duration, Utc};
-use serde::{Deserialize, Serialize, Serializer};
+use serde::{Deserialize, Serialize};
 use url::Url;
-use url_serde;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let file = File::open("3_ecosystem/3_6_serde/request.json")?;
@@ -106,26 +105,27 @@ mod durations_str_serde {
     }
 }
 
+#[cfg(test)]
 mod tests {
+    use crate::Request;
     use std::fs::File;
     use std::io::{BufReader, Read, Write};
-    use crate::Request;
 
     #[test]
     fn test_json_to_toml() {
         let file = File::open("../../3_ecosystem/3_6_serde/request.json").unwrap();
         let reader = BufReader::new(file);
         let original_req: Request = serde_json::from_reader(reader).unwrap();
-        
+
         let toml_string = toml::to_string(&original_req).unwrap();
         let mut file = File::create("../../3_ecosystem/3_6_serde/request.toml").unwrap();
         file.write_all(toml_string.as_bytes()).unwrap();
-        
+
         let mut file = File::open("../../3_ecosystem/3_6_serde/request.toml").unwrap();
         let mut toml_string = String::new();
         file.read_to_string(&mut toml_string).unwrap();
         let deserialized_req: Request = toml::from_str(&toml_string).unwrap();
-        
+
         assert_eq!(original_req, deserialized_req);
     }
 

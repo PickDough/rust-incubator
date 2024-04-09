@@ -1,11 +1,10 @@
-
-mod my_iterator_ext;
+#![allow(dead_code, unused)]
 mod my_error;
+mod my_iterator_ext;
 
-use std::any::TypeId;
-use std::fmt::{Debug, Display, Formatter};
-use my_iterator_ext::MyIteratorExt;
 use crate::my_error::MyError;
+use std::fmt::Display;
+use std::fmt::Formatter;
 
 ///
 ///```compile_fail
@@ -35,9 +34,9 @@ use crate::my_error::MyError;
 #[derive(Debug)]
 struct Bar;
 
-
 impl Display for Bar {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        let _ = f;
         todo!()
     }
 }
